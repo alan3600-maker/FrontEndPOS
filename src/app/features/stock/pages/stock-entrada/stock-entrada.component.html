@@ -1,0 +1,47 @@
+<mat-card class="card">
+  <mat-card-title>Entrada de stock</mat-card-title>
+  <mat-card-subtitle>Cargar cantidad a un depósito</mat-card-subtitle>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Depósito</mat-label>
+        <mat-select formControlName="depositoId">
+          <mat-option *ngFor="let d of depositos()" [value]="d.id">
+            {{ d.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <button mat-stroked-button type="button" (click)="pickProducto()">
+        Buscar producto
+      </button>
+
+      <div class="picked" *ngIf="producto() as p">
+        <div><b>{{ p.descripcion }}</b></div>
+        <div class="muted">{{ p.sku }}</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="w200">
+        <mat-label>Cantidad</mat-label>
+        <input matInput type="number" min="1" formControlName="cantidad" />
+      </mat-form-field>
+    </div>
+
+    <div class="actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        [disabled]="!canSave()"
+        (click)="guardar()"
+      >
+        Guardar
+      </button>
+    </div>
+  </form>
+</mat-card>

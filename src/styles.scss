@@ -1,0 +1,99 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+
+  /*en vez de: font: var(--mat-sys-body-medium); */
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+
+  margin: 0;
+  height: 100%;
+}
+
+/* ===== Snackbar ERROR (Material 3 / MDC) ===== */
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+  background-color: #d32f2f !important; /* rojo Material */
+}
+
+/* Texto del mensaje */
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__label {
+  color: #ffffff !important;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Texto del botón (Cerrar) */
+.mat-mdc-snack-bar-container.snackbar-error .mdc-button__label {
+  color: #ffffff !important;
+}
+
+/* ===== Sidenav: sin bordes redondeados ===== */
+.mat-drawer,
+.mat-drawer-inner-container,
+.mat-sidenav {
+  border-radius: 0 !important;
+}
+
+/* ===== Sidenav: fondo + texto blanco ===== */
+.app-sidenav {
+  background: #0f172a !important; /* azul oscuro */
+  color: #ffffff !important;
+}
+
+/* Texto de los items (MDC list) */
+.app-sidenav .mdc-list-item__primary-text,
+.app-sidenav .mdc-list-item__content,
+.app-sidenav .mat-mdc-list-item-title,
+.app-sidenav a,
+.app-sidenav span {
+  color: #ffffff !important;
+}
+
+/* Hover/active un poco visible */
+.app-sidenav .mdc-list-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+.app-sidenav .mdc-list-item.mdc-list-item--activated {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Opcional: íconos blancos si usás <mat-icon> */
+.app-sidenav .mat-icon {
+  color: #ffffff !important;
+}
+
+/* Fix notch/label recortado en outline */
+.mdc-text-field--outlined .mdc-floating-label {
+  line-height: 1.2;
+}
+
+/* Opcional: mejora el espacio del wrapper */
+.mat-mdc-form-field .mdc-text-field--outlined {
+  align-items: center;
+}

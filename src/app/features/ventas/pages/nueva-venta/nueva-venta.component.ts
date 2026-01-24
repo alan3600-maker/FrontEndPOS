@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal, inject } from '@angular/core';
+import { Component, computed, effect, signal, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -9,18 +9,16 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
-
 import { ClienteDto, ProductoDto, VentaItemDraft, VentaRequest } from '../../api/ventas.model';
 import { ClientePickerDialogComponent } from '../../ui/cliente-picker-dialog/cliente-picker-dialog.component';
 import { ProductoPickerDialogComponent } from '../../ui/producto-picker-dialog/producto-picker-dialog.component';
 import { VentasApi } from '../../api/ventas.api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../../../../../environments/environment';
+import { PosContextService } from '../../../../core/pos/pos-context.service';
+import { CajaTurnosApiService, CajaTurnoDto } from '../../../../core/pos/caja-turnos.api.service';
 
 // ✅ Poné acá el ID real del depósito principal en tu BD
 const DEFAULT_DEPOSITO_ID = 1;
-// ✅ Caja por defecto (local). Ideal: seleccionar caja en UI.
-const DEFAULT_CAJA_ID = environment.defaultCajaId ?? 1;
 
 @Component({
   standalone: true,
@@ -42,12 +40,40 @@ export class NuevaVentaComponent {
   private dialog = inject(MatDialog);
   private api = inject(VentasApi);
   private snack = inject(MatSnackBar);
+  readonly pos = inject(PosContextService);
+  private cajaTurnosApi = inject(CajaTurnosApiService);
+
+  turnoAbierto = signal<CajaTurnoDto | null>(null);
+  abriendoTurno = signal(false);
 
   cliente = signal<ClienteDto | null>(null);
   ventaId = signal<number | null>(null);
   items = signal<(VentaItemDraft & { descripcion?: string; sku?: string })[]>([]);
   busy = signal(false);
   ventaFinalizada = signal(false);
+
+  constructor() {
+    // cada vez que cambie la cajaId (settings), volvemos a consultar turno abierto
+    effect(() => {
+      const cajaId = this.pos.cajaId();
+      if (!cajaId) {
+        this.turnoAbierto.set(null);
+        this.pos.setTurnoId(null);
+        return;
+      }
+
+      this.cajaTurnosApi.getAbierta(cajaId).subscribe({
+        next: (t) => {
+          this.turnoAbierto.set(t);
+          this.pos.setTurnoId(t?.id ?? null);
+        },
+        error: () => {
+          this.turnoAbierto.set(null);
+          this.pos.setTurnoId(null);
+        },
+      });
+    });
+  }
 
   public resetVenta() {
     this.cliente.set(null);
@@ -137,7 +163,20 @@ export class NuevaVentaComponent {
 
         this.ventaId.set(id);
 
-        this.api.confirmar(id, DEFAULT_CAJA_ID).subscribe({
+        const cajaId = this.pos.cajaId();
+        if (!cajaId) {
+          this.busy.set(false);
+          this.snack.open('Configurá una Caja antes de confirmar la venta.', 'OK', { duration: 4000 });
+          return;
+        }
+
+        if (!this.pos.turnoId()) {
+          this.busy.set(false);
+          this.snack.open('No hay turno abierto para la caja seleccionada. Abrí la caja para continuar.', 'OK', { duration: 4500 });
+          return;
+        }
+
+        this.api.confirmar(id, cajaId).subscribe({
           next: () => {
             this.api.emitirNoFiscal(id).subscribe({
               next: (fac) => {
@@ -173,10 +212,12 @@ export class NuevaVentaComponent {
     if (!c) return null;
     if (!items || items.length === 0) return null;
 
+    const cajaId = this.pos.cajaId();
+    if (!cajaId) return null;
+
     return {
+      cajaId,
       clienteId: c.id,
-      cajaId: DEFAULT_CAJA_ID,
-      fecha: new Date().toISOString(),
       items: items.map((it) => ({
         tipo: 'PRODUCTO',
         productoId: it.productoId,
@@ -194,10 +235,47 @@ export class NuevaVentaComponent {
   });
 
   canConfirmar = computed(() => {
-    return !!this.cliente() && this.items().length > 0 && !this.ventaFinalizada() && !this.busy();
+    return !!this.pos.cajaId() && !!this.pos.turnoId() && !!this.cliente() && this.items().length > 0 && !this.ventaFinalizada() && !this.busy();
   });
 
   canNuevaVenta = computed(() => {
     return this.ventaFinalizada() && !this.busy();
   });
+
+  get faltaTurno() {
+    return !!this.pos.cajaId() && !this.pos.turnoId();
+  }
+
+  // usado en el template (callable)
+  mostrandoAbrir() {
+    return this.faltaTurno;
+  }
+
+  // alias más explícito para el botón del template
+  abrirTurnoAhora() {
+    this.abrirCaja();
+  }
+
+  abrirCaja() {
+    const cajaId = this.pos.cajaId();
+    if (!cajaId) {
+      this.snack.open('Primero configurá la caja en POS Settings.', 'OK', { duration: 3500 });
+      return;
+    }
+
+    this.abriendoTurno.set(true);
+    this.cajaTurnosApi.abrir(cajaId, 0).subscribe({
+      next: (t) => {
+        this.turnoAbierto.set(t);
+        this.pos.setTurnoId(t?.id ?? null);
+        this.abriendoTurno.set(false);
+        this.snack.open('Caja abierta. Ya podés confirmar ventas.', 'Cerrar', { duration: 2500, verticalPosition: 'top' });
+      },
+      error: (err) => {
+        this.abriendoTurno.set(false);
+        const msg = err?.error?.message || err?.error?.error || 'No se pudo abrir la caja.';
+        this.snack.open(String(msg), 'Cerrar', { duration: 4500, verticalPosition: 'top' });
+      },
+    });
+  }
 }

@@ -59,10 +59,8 @@ export interface VentaCobroItemRequest {
 
 /** VentaRequest del backend */
 export interface VentaRequest {
-  clienteId: number;
-  /** Caja desde donde se opera la venta (define el turno abierto). */
   cajaId: number;
-  fecha?: string; // OffsetDateTime ISO string
+  clienteId: number;
   observacion?: string | null;
   items: VentaRequestItem[];
   cobros?: VentaCobroItemRequest[];
@@ -75,9 +73,6 @@ export interface VentaDto {
   clienteId: number;
   clienteNombre?: string | null;
   total: number;
-  /** Para UI/Reportes: se asigna al crear o confirmar. */
-  cajaId?: number | null;
-  cajaTurnoId?: number | null;
 }
 
 /** FacturaResponse */

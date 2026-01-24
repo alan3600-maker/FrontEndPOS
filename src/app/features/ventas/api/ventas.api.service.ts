@@ -29,8 +29,9 @@ updateVenta(ventaId: number, req: VentaRequest) {
 }
 
 confirmar(ventaId: number, cajaId: number) {
-  // Backend: POST /ventas/{id}/confirmar?cajaId=...
-  return this.http.post<VentaDto>(`${this.base}/ventas/${ventaId}/confirmar?cajaId=${cajaId}`, {});
+  return this.http.post<VentaDto>(`${this.base}/ventas/${ventaId}/confirmar`, {}, {
+    params: { cajaId: String(cajaId) },
+  });
 }
 
   // ✅ Emitir NO FISCAL desde venta (según tu FacturaController)

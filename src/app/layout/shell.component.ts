@@ -6,8 +6,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../core/auth/auth.service';
 import { HasPermisoDirective } from '../core/auth/has-permiso.directive';
+import { PosContextService } from '../core/pos/pos-context.service';
+import { PosSettingsDialogComponent } from './pos-settings-dialog/pos-settings-dialog.component';
 
 @Component({
   standalone: true,
@@ -20,6 +25,8 @@ import { HasPermisoDirective } from '../core/auth/has-permiso.directive';
     MatToolbarModule,
     MatListModule,
     MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
     HasPermisoDirective
   ],
   templateUrl: './shell.component.html',
@@ -28,6 +35,8 @@ import { HasPermisoDirective } from '../core/auth/has-permiso.directive';
 export class ShellComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  readonly pos = inject(PosContextService);
 
   get username() {
     return this.auth.auth()?.username ?? '';
@@ -44,5 +53,11 @@ export class ShellComponent {
   logout() {
     this.auth.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  openPosSettings() {
+    this.dialog.open(PosSettingsDialogComponent, {
+      width: '360px',
+    });
   }
 }

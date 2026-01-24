@@ -27,6 +27,14 @@
       <div class="muted" *ngIf="ventaId()">Venta #{{ ventaId() }}</div>
     </div>
 
+    <div class="turno" *ngIf="mostrandoAbrir()">
+      <mat-icon class="warn">warning</mat-icon>
+      <span>No hay turno abierto para la caja {{ pos.cajaId() }}.</span>
+      <button mat-stroked-button color="primary" (click)="abrirTurnoAhora()" [disabled]="busy()">
+        Abrir caja
+      </button>
+    </div>
+
     <div class="empty" *ngIf="items().length === 0">Agregá productos para continuar.</div>
 
     <table mat-table [dataSource]="items()" *ngIf="items().length > 0" class="table">

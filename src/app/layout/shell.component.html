@@ -10,6 +10,7 @@
 
       <a mat-list-item routerLink="/clientes" *hasPermiso="'CLIENTE_CRUD'">Clientes</a>
       <a mat-list-item routerLink="/productos" *hasPermiso="'PRODUCTO_CRUD'">Productos</a>
+      <a mat-list-item routerLink="/stock/entrada" *hasPermiso="'STOCK_MOVIMIENTO'">Entrada de stock</a>
       <a mat-list-item routerLink="/ventas/nueva" *hasPermiso="'VENTA_CRUD'">Nueva venta</a>
     </mat-nav-list>
   </mat-sidenav>
@@ -18,6 +19,10 @@
     <mat-toolbar class="app-toolbar">
       <span>Hidráulica Caacupe</span>
       <span class="spacer"></span>
+      <button mat-button (click)="openPosSettings()" aria-label="Configurar caja">
+        <mat-icon>store</mat-icon>
+        Caja: {{ pos.cajaId() || 'Sin configurar' }}
+      </button>
       <span class="user">{{ username }}</span>
       <button mat-button (click)="logout()">Salir</button>
     </mat-toolbar>

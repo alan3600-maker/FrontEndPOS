@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../core/auth/auth.service';
 import { HasPermisoDirective } from '../core/auth/has-permiso.directive';
+import { HasRolDirective } from '../core/auth/has-rol.directive';
 import { PosContextService } from '../core/pos/pos-context.service';
 import { PosSettingsDialogComponent } from './pos-settings-dialog/pos-settings-dialog.component';
 
@@ -27,7 +28,8 @@ import { PosSettingsDialogComponent } from './pos-settings-dialog/pos-settings-d
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    HasPermisoDirective
+    HasPermisoDirective,
+    HasRolDirective
   ],
   templateUrl: './shell.component.html',
   styleUrls: ['./shell.component.scss'],

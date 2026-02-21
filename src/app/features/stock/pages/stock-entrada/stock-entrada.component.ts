@@ -15,6 +15,8 @@ import { DepositoDto } from '../../api/movimientos-stock.model';
 import { ProductoDto } from '../../../ventas/api/ventas.model';
 import { ProductoPickerDialogComponent } from '../../../ventas/ui/producto-picker-dialog/producto-picker-dialog.component';
 
+import { firstValueFrom } from 'rxjs';
+
 @Component({
   standalone: true,
   selector: 'app-stock-entrada',
@@ -61,7 +63,7 @@ export class StockEntradaComponent {
 
   async pickProducto() {
     const ref = this.dialog.open(ProductoPickerDialogComponent, { width: '720px' });
-    const p: ProductoDto | null = await ref.afterClosed().toPromise();
+    const p: ProductoDto | null = await firstValueFrom(ref.afterClosed());
     if (!p) return;
     this.producto.set(p);
   }

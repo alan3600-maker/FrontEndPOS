@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+// Evitamos el import absoluto "src/..." porque puede no existir el path alias en tsconfig.
 import { environment } from '../../../environments/environment';
-
 
 export interface CajaTurnoDto {
   id: number;

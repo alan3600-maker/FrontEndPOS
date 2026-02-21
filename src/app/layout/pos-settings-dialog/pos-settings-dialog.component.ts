@@ -11,7 +11,6 @@ import { CajasApiService, CajaDto } from '../../core/pos/cajas.api.service';
 import { PosContextService } from '../../core/pos/pos-context.service';
 import { SucursalesApiService, SucursalDto } from '../../core/pos/sucursales.api.service';
 
-
 @Component({
   selector: 'app-pos-settings-dialog',
   standalone: true,
@@ -68,14 +67,35 @@ import { SucursalesApiService, SucursalDto } from '../../core/pos/sucursales.api
       </button>
     </div>
   `,
-  styles: [
-    `
-      .content { display: flex; flex-direction: column; gap: 12px; min-width: 360px; }
-      .full { width: 100%; }
-      .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-      .muted { opacity: 0.7; }
-    `,
-  ],
+  styles: [`
+  /* 1) Dejá el contenedor del dialog SIN recorte */
+  :host ::ng-deep .mat-mdc-dialog-content{
+    overflow: visible !important;
+    padding-top: 14px !important;  /* espacio para el label */
+  }
+
+  /* 2) Si querés scroll, que sea acá, no en mat-dialog-content */
+  .content{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 360px;
+
+    max-height: 70vh;
+    overflow: auto;
+
+    padding-top: 6px;  /* extra margen arriba */
+  }
+
+  .full{ width: 100%; }
+
+  /* Dale un poco más de aire al primer campo */
+  mat-form-field{ display:block; }
+  mat-form-field:first-of-type{ margin-top: 6px; }
+
+  .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .muted{ opacity: 0.7; }
+`],
 })
 export class PosSettingsDialogComponent {
   private dialogRef = inject(MatDialogRef<PosSettingsDialogComponent>);

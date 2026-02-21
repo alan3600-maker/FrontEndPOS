@@ -23,7 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 
           <div class="actions">
             <button mat-raised-button color="primary" routerLink="/">Volver al inicio</button>
-            <button mat-button routerLink="/login">Ir al login</button>
+          <button mat-button [routerLink]="['/login']">Ir al login</button>
           </div>
         </mat-card-content>
       </mat-card>
@@ -67,4 +67,6 @@ import { MatIconModule } from '@angular/material/icon';
     `,
   ],
 })
-export class ForbiddenComponent {}
+export class ForbiddenComponent {
+  
+}

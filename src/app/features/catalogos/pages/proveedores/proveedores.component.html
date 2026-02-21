@@ -1,0 +1,106 @@
+<div class="header">
+  <h2>Proveedores</h2>
+
+  <div class="actions">
+    <mat-form-field appearance="outline" class="search">
+      <mat-label>Buscar</mat-label>
+      <input matInput (input)="onSearch($any($event.target).value)" placeholder="Nombre / RUC / Teléfono" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="crear()" [disabled]="loading()">
+      <mat-icon>add</mat-icon>
+      Nuevo
+    </button>
+  </div>
+</div>
+
+<table mat-table [dataSource]="rows()" class="mat-elevation-z2">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef>Nombre / Razón social</th>
+      <td mat-cell *matCellDef="let row">{{ row.nombreRazonSocial }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ruc">
+      <th mat-header-cell *matHeaderCellDef>RUC</th>
+      <td mat-cell *matCellDef="let row">{{ row.ruc || '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="telefono">
+      <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+      <td mat-cell *matCellDef="let row">{{ row.telefono || '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="activo">
+      <th mat-header-cell *matHeaderCellDef>Activo</th>
+      <td mat-cell *matCellDef="let row">{{ row.activo === false ? 'No' : 'Sí' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="acciones">
+        <button mat-icon-button (click)="editar(row)" [disabled]="loading()" matTooltip="Editar">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="toggleActivo(row)"
+          [disabled]="loading()"
+          [matTooltip]="row.activo ? 'Desactivar' : 'Activar'"
+        >
+          <mat-icon>{{ row.activo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns: cols"></tr>
+  </table>
+
+<mat-paginator
+  [length]="total()"
+  [pageIndex]="page()"
+  [pageSize]="size()"
+  [pageSizeOptions]="[5,10,20,50]"
+  (page)="onPage($event)">
+</mat-paginator>
+
+<ng-template #formDialog let-data>
+
+  <h2 mat-dialog-title>{{ data?.id ? 'Editar proveedor' : 'Nuevo proveedor' }}</h2>
+
+ <div mat-dialog-content class="dlg-content" [formGroup]="form">
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Nombre / Razón social</mat-label>
+      <input matInput formControlName="nombreRazonSocial" />
+      <mat-error *ngIf="form.controls.nombreRazonSocial.invalid">Requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>RUC</mat-label>
+      <input matInput formControlName="ruc" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="direccion" />
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" (click)="guardar()" [disabled]="form.invalid || loading()">
+      Guardar
+    </button>
+  </div>
+</ng-template>

@@ -10,8 +10,14 @@
 
       <a mat-list-item routerLink="/clientes" *hasPermiso="'CLIENTE_CRUD'">Clientes</a>
       <a mat-list-item routerLink="/productos" *hasPermiso="'PRODUCTO_CRUD'">Productos</a>
+      <a mat-list-item routerLink="/catalogos/categorias" *hasPermiso="'PRODUCTO_CRUD'">Categorías</a>
+      <a mat-list-item routerLink="/catalogos/marcas" *hasPermiso="'PRODUCTO_CRUD'">Marcas</a>
+      <a mat-list-item routerLink="/catalogos/proveedores" *hasPermiso="'PRODUCTO_CRUD'">Proveedores</a>
+
+      <a mat-list-item routerLink="/sucursales" *hasRol="'ADMIN'">Sucursales</a>
       <a mat-list-item routerLink="/stock/entrada" *hasPermiso="'STOCK_MOVIMIENTO'">Entrada de stock</a>
       <a mat-list-item routerLink="/ventas/nueva" *hasPermiso="'VENTA_CRUD'">Nueva venta</a>
+      <a mat-list-item routerLink="/presupuestos" *hasPermiso="'OT_CRUD'">Presupuestos</a>
     </mat-nav-list>
   </mat-sidenav>
 

@@ -8,12 +8,6 @@ import { guestGuard } from './core/guards/guest.guard';
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
 
-  {
-    path: 'forbidden',
-    loadComponent: () =>
-      import('./core/pages/forbidden/forbidden.component').then((m) => m.ForbiddenComponent),
-  },
-
   // 403 (top-level)
   {
     path: 'forbidden',
@@ -69,6 +63,35 @@ export const routes: Routes = [
         canActivate: [accessGuard],
         data: { permisos: ['STOCK_MOVIMIENTO'] },
       },
+
+      {
+        path: 'catalogos',
+        loadChildren: () =>
+          import('./features/catalogos/catalogos.routes').then((m) => m.CATALOGOS_ROUTES),
+        canActivate: [accessGuard],
+        data: { permisos: ['PRODUCTO_CRUD'] },
+      },
+
+      {
+        path: 'presupuestos',
+        loadChildren: () =>
+          import('./features/presupuestos/presupuestos.routes').then((m) => m.PRESUPUESTOS_ROUTES),
+        canActivate: [accessGuard],
+        data: { permisos: ['OT_CRUD'] },
+      },
+
+      {
+        path: 'sucursales',
+        loadComponent: () =>
+          import('./features/sucursales/pages/sucursales/sucursales.component').then(
+            (m) => m.SucursalesComponent
+          ),
+        canActivate: [accessGuard],
+        // Si más adelante agregás un permiso específico, reemplazá ADMIN por ese permiso.
+        data: { roles: ['ADMIN'] },
+      },
+
+      // (duplicados removidos)
     ],
   },
 

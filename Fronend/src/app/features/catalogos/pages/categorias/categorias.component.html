@@ -1,0 +1,60 @@
+<div class="header">
+  <h2>Categorías</h2>
+
+  <div class="actions">
+    <mat-form-field appearance="outline" class="search">
+      <mat-label>Buscar</mat-label>
+      <input matInput (input)="onSearch($any($event.target).value)" placeholder="Nombre" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="crear()" [disabled]="loading()">
+      <mat-icon>add</mat-icon>
+      Nuevo
+    </button>
+  </div>
+</div>
+
+<table mat-table [dataSource]="rows()" class="mat-elevation-z1">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let c">{{ c.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+    <td mat-cell *matCellDef="let c">{{ c.nombre }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="activo">
+    <th mat-header-cell *matHeaderCellDef>Activa</th>
+    <td mat-cell *matCellDef="let c">{{ c.activo ? 'Sí' : 'No' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let c" class="acciones">
+      <button mat-icon-button (click)="editar(c)" [disabled]="loading()" matTooltip="Editar">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        (click)="toggleActivo(c)"
+        [disabled]="loading()"
+        [matTooltip]="c.activo ? 'Desactivar' : 'Activar'"
+      >
+        <mat-icon>{{ c.activo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="cols"></tr>
+  <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+</table>
+
+<mat-paginator
+  [length]="total()"
+  [pageIndex]="page()"
+  [pageSize]="size()"
+  [pageSizeOptions]="[5,10,20,50]"
+  (page)="onPage($event)">
+</mat-paginator>

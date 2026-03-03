@@ -1,0 +1,46 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search { width: 320px; }
+
+.acciones {
+  width: 160px;
+  text-align: right;
+}
+
+table {
+  width: 100%;
+}
+
+.muted {
+  opacity: 0.7;
+}
+/* los form-field del dialog deben ocupar todo el ancho */
+.full {
+  width: 100%;
+}
+
+/* evita que el label del outline se recorte arriba */
+.dlg-content {
+  padding-top: 12px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* opcional: por si algún mat-form-field no tiene class="full" */
+.dlg-content .mat-mdc-form-field {
+  width: 100%; 
+}

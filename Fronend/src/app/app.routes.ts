@@ -54,26 +54,6 @@ export const routes: Routes = [
         canActivate: [accessGuard],
         data: { permisos: ['VENTA_CRUD'] },
       },
-
-      {
-        path: 'ventas/reportes',
-        loadComponent: () =>
-          import('./features/ventas/pages/reportes-ventas/reportes-ventas.component').then(
-            (m) => m.ReportesVentasComponent
-          ),
-        canActivate: [accessGuard],
-        data: { roles: ['ADMIN', 'CAJERO'] },
-      },
-
-      {
-        path: 'caja/arqueo',
-        loadComponent: () =>
-          import('./core/pos/pages/arqueo-caja/arqueo-caja.component').then(
-            (m) => m.ArqueoCajaComponent
-          ),
-        canActivate: [accessGuard],
-        data: { roles: ['ADMIN', 'CAJERO'] },
-      },
       {
         path: 'stock/entrada',
         loadComponent: () =>

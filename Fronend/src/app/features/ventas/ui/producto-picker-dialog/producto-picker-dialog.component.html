@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Agregar producto</h2>
+
+<div mat-dialog-content>
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Buscar</mat-label>
+    <input matInput (input)="onInput($any($event.target).value)" placeholder="Descripción / SKU" />
+  </mat-form-field>
+
+  <div class="muted" *ngIf="loading()">Buscando...</div>
+
+  <mat-nav-list>
+    <a mat-list-item *ngFor="let p of rows()" (click)="pick(p)">
+      <div class="row">
+        <div class="left">
+          <div class="title">{{ p.descripcion }}</div>
+          <div class="sub">{{ p.sku }}</div>
+        </div>
+        <div class="price">{{ p.precio | number:'1.0-2' }}</div>
+      </div>
+    </a>
+  </mat-nav-list>
+
+  <div class="muted" *ngIf="!loading() && rows().length === 0">
+    Sin resultados.
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancelar</button>
+</div>

@@ -1,0 +1,94 @@
+.wrap {
+  padding: 16px;
+}
+
+.card {
+  max-width: 1100px;
+  margin: 0 auto;
+
+  /* ✅ ESTO ES LO QUE FALTABA */
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.meta {
+  margin-bottom: 12px;
+}
+
+.table-wrap {
+  margin-top: 8px;
+}
+
+table {
+  width: 100%;
+}
+
+/* ✅ para que la tabla no “pegue” al borde visualmente */
+:host ::ng-deep .mat-mdc-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.empty {
+  padding: 12px 8px;
+  opacity: 0.8;
+}
+
+.footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer .total {
+  text-align: right;
+  min-width: 180px;
+}
+
+.footer .total span {
+  display: block;
+  opacity: 0.75;
+  font-weight: 500;
+}
+
+.footer .total strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+.cell-input {
+  width: 110px;
+}
+
+:host ::ng-deep .cell-input .mat-mdc-form-field-subscript-wrapper {
+  display: none; /* saca el espacio del hint/error en celdas */
+}
+
+:host ::ng-deep .cell-input .mat-mdc-form-field-infix {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}

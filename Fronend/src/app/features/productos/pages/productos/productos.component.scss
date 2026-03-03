@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search {
+  width: 340px;
+}
+
+.actions-col {
+  width: 110px;
+  text-align: right;
+  white-space: nowrap;      // evita salto de línea
+}
+
+.actions-col button {
+  display: inline-flex;     // asegura horizontal
+  margin-left: 6px;
+}

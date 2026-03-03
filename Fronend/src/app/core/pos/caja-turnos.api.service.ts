@@ -13,27 +13,6 @@ export interface CajaTurnoDto {
   montoCierreDeclarado?: number;
 }
 
-export interface ArqueoPorMedioDto {
-  medioPago: string;
-  esperado: number;
-}
-
-export interface ArqueoCajaDto {
-  turnoId: number;
-  cajaId: number;
-  fechaApertura?: string;
-  fechaCierre?: string;
-  montoInicial: number;
-  totalVentas: number;
-  totalIngresos: number;
-  totalEgresos: number;
-  saldoEfectivoEsperado: number;
-  totalEsperado: number;
-  totalDeclarado: number;
-  diferencia: number;
-  porMedio: ArqueoPorMedioDto[];
-}
-
 @Injectable({ providedIn: 'root' })
 export class CajaTurnosApiService {
   private http = inject(HttpClient);
@@ -49,15 +28,5 @@ export class CajaTurnosApiService {
     params = params.set('montoInicial', String(montoInicial ?? 0));
     // El backend toma el usuario desde el token (usuarioAperturaId es opcional)
     return this.http.post<CajaTurnoDto>(`${this.base}/abrir`, null, { params });
-  }
-
-  cerrar(turnoId: number, montoFinalDeclarado = 0, observacion?: string) {
-    let params = new HttpParams().set('montoFinalDeclarado', String(montoFinalDeclarado ?? 0));
-    if (observacion) params = params.set('observacion', observacion);
-    return this.http.post<CajaTurnoDto>(`${this.base}/${turnoId}/cerrar`, null, { params });
-  }
-
-  arqueo(turnoId: number) {
-    return this.http.get<ArqueoCajaDto>(`${this.base}/${turnoId}/arqueo`);
   }
 }

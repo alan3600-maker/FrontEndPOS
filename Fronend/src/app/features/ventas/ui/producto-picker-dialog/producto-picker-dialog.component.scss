@@ -1,0 +1,16 @@
+.full { width: 100%; }
+.muted { opacity: .75; font-size: 12px; margin: 8px 0; }
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.left { display: flex; flex-direction: column; }
+.title { font-weight: 600; }
+.sub { opacity: .75; font-size: 12px; }
+
+.price { white-space: nowrap; font-weight: 700; }

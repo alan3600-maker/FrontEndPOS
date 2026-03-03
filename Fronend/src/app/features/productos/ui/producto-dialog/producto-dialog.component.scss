@@ -1,0 +1,19 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.col2 {
+  grid-column: span 2;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* opcional: si querés que todos los outline queden iguales */
+.mat-mdc-form-field {
+  align-self: start;
+}
